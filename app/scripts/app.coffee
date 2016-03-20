@@ -56,6 +56,11 @@ class App
     @canvas = @setupCanvas()
     @canvasContext = @canvas.getContext "2d"
     @$download = $ ".download-button"
+    @$upload = $ ".upload-button"
+    @$nameForm = $ ".name-form"
+    @$nameField = $ ".name-field"
+    @$nameClose = $ ".name-close"
+    @$changeName = $ ".change-name"
 
     @$body = $ "body"
 
@@ -66,7 +71,9 @@ class App
 
     @editor = @setupAce()
     @loadContent()
-    @editor.focus()
+
+    if localStorage["name"]
+      @editor.focus()
 
     @editor.getSession().on "change", @onChange
     $(window).on "beforeunload", -> "Hold your horses!"
@@ -74,10 +81,22 @@ class App
     $(".instructions-container, .instructions-button").on "click", ->
       $("body").toggleClass "show-instructions"
 
+    @$changeName.on "click", @onClickChangeName
     @$reference.on "click", => @$reference.toggleClass "active"
     @$download.on "click", @onClickDownload
+    @$upload.on "click", @onClickUpload
+    @$nameForm.on "submit", @onSubmitNameForm
+    @$nameClose.on "click", @onCloseNameForm
 
     window.requestAnimationFrame? @onFrame
+
+    if !localStorage["name"]
+      $nameField = @$nameField
+
+      setTimeout((->
+        $nameField.focus()
+      ), 1000)
+
 
   setupAce: ->
     editor = ace.edit "editor"
@@ -99,8 +118,14 @@ class App
     canvas
 
   loadContent: ->
+    if !localStorage["name"]
+      @$body.addClass "show-name"
+    else
+      @$nameField.val localStorage["name"]
+
     return unless (content = localStorage["content"])
     @editor.setValue content, -1
+
 
   saveContent: =>
     localStorage["content"] = @editor.getValue()
@@ -233,6 +258,36 @@ class App
     $a[0].click()
 
     $a.remove()
+
+  onClickUpload: =>
+    $.post('/upload.php', {
+      name: localStorage['name'],
+      html: @editor.getValue()
+    })
+
+  onSubmitNameForm: (e) =>
+    e.preventDefault()
+
+    value =  @$nameField.val()
+
+    if value.trim().length
+      @$body.removeClass "show-name"
+      localStorage["name"] = value
+
+  onCloseNameForm: () =>
+    if localStorage['name']
+      @$body.removeClass "show-name"
+
+  onClickChangeName: =>
+    @$body.addClass "show-name"
+
+    $nameField = @$nameField
+
+    $nameField.val localStorage['name']
+
+    setTimeout((->
+      $nameField.focus().select()
+    ), 1200)
 
   onChange: (e) =>
     @debouncedSaveContent()

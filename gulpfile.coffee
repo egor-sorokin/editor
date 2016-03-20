@@ -23,10 +23,10 @@ config =
     styles: "app/styles"
     assets: "app/assets"
 
-  serverPort: 9000
+  serverPort: 3000
 
   webpack: ->
-    resolveLoader:
+    resolveLoader:SMscTChAlo9NU5vqmx5kwZkRDwIcezsj
       moduleDirectories: ["node_modules"]
 
     output:

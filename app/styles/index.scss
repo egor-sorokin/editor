@@ -219,11 +219,115 @@ body.power-mode #editor {
   }
 }
 
+.upload-button {
+  position: absolute;
+  z-index: 10;
+  bottom: 20px;
+  right: 20px;
+
+  &:active {
+    bottom: 19px;
+  }
+}
+
+.name {
+  visibility: hidden;
+
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+
+  background: rgba(0, 0, 0, 0.8);
+
+  opacity: 0;
+
+  transition: all 0.3s ease;
+
+  z-index: 100;
+
+  body.show-name & {
+    visibility: visible;
+
+    opacity: 1;
+  }
+  &-close {
+    position: absolute;
+    top: 30px;
+    right: 30px;
+
+    float: right;
+
+    font-size: 30px;
+    color: #fff;
+
+    cursor: pointer;
+
+    &:before {
+      content: 'X';
+    }
+  }
+  &-form {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+
+    width: 500px;
+
+    padding: 30px 50px;
+
+    opacity: 0;
+
+    transform: translate(-50%, -100%);
+
+    transition: all 0.3s ease 0.2s;
+
+    body.show-name & {
+      opacity: 1;
+
+      transform: translate(-50%, -50%);
+    }
+  }
+  &-label {
+    display: block;
+
+    margin-bottom: 30px;
+
+    color: #fff;
+    text-align: center;
+  }
+  &-field {
+    width: 100%;
+
+    border: none;
+    border-bottom: 1px solid #fff;
+    background: none;
+
+    font-family: "Press Start 2P", sans-serif;
+    font-size: 32px;
+    color: #fff;
+    text-align: center;
+  }
+}
+
 .instructions-button {
   position: absolute;
   z-index: 20;
   right: 20px;
   bottom: 70px;
+}
+
+.change-name {
+  position: absolute;
+  z-index: 30;
+  bottom: 350px;
+  right: 20px;
+  cursor: pointer;
+  color: white;
+  text-align: right;
+  font-size: 12px;
+  box-sizing: border-box;
 }
 
 .reference-screenshot-container {
